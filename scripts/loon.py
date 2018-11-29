@@ -36,16 +36,26 @@ class Loon:
             self.start_cell_r = data[2][0]
             self.start_cell_c = data[2][1]
 
-            for i in range(self.B):
-                self.satellites.append(Satellite(self.V, self.start_cell_r, self.start_cell_c))
-
             for i in range(self.TCells):
-                self.target_cells.append(TargetCell(data[i + 3][0], data[i + 3][1]))
+                self.target_cells.append(TargetCell(self, data[i + 3][0], data[i + 3][1]))
+
+            for i in range(self.B):
+                try:
+                    self.satellites.append(Satellite(self, self.target_cells[i]))
+                except IndexError:
+                    self.satellites.append(Satellite(self, None))
 
             data = data[self.TCells + 3:]
 
             for i in range(self.A):
-                self.movement_grids.append(MovementGrid(self.R, self.C, data[i * self.R: (i + 1)*self.R]))
+                self.movement_grids.append(MovementGrid(self, data[i * self.R: (i + 1)*self.R]))
+
+    def distance(self, r, c, u, v):
+        return (r  - u)**2 + (min(abs(c - v), self.C - abs(c - v)))**2
+
+    def simulation(self):
+        pass
+
 
 
 

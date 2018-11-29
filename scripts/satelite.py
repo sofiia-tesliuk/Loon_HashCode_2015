@@ -1,12 +1,44 @@
 class Satellite:
-    def __init__(self, loon, v):
+    def __init__(self, loon, target_cell):
         self.loon = loon
         self.r = loon.start_cell_r
         self.c = loon.start_cell_c
         self.altitude = 0
+        self.target_cell = target_cell
+
+    def launch(self):
+        if self.target_cell is not None:
+            self.altitude = 1
 
     def launched(self):
         return self.altitude > 0
 
     def in_simulation(self):
         return (self.c is not None) and self.launched()
+
+    def possible_distance_to_target(self, alt):
+        possible_move = self.loon.movement_grids[alt].next_position(self.r, self.c)
+        if possible_move[0] is not None:
+            return self.loon.distance(possible_move[0], possible_move[1],
+                                      self.target_cell.r, self.target_cell.c)
+        return float('inf')
+
+    def next_move(self):
+        if self.launched():
+            min = self.possible_distance_to_target(self.altitude)
+            i_min = 0
+            if self.altitude > 1:
+                if self.possible_distance_to_target(self.altitude - 1) < min:
+                    min = min
+                    i_min = -1
+            if self.altitude < self.loon.A - 2:
+                if self.possible_distance_to_target(self.altitude + 1) < min:
+                    min = min
+                    i_min = 1
+
+            self.altitude += i_min
+            next_move = self.loon.movement_grids[self.altitude].next_position(self.r, self.c)
+            self.r = next_move[0]
+            self.c = next_move[1]
+
+

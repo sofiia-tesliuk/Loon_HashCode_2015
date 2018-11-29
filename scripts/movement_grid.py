@@ -16,7 +16,7 @@ class MovementGrid:
         except IndexError:
             pass
 
-    def next_possible_position(self, r, c):
+    def next_position(self, r, c):
         if 0 <= r + self._a(r, c) <= self.loon.R:
             return r + self._a(r, c), (c + self._b(r, c)) % self.loon.C
         return None, None
