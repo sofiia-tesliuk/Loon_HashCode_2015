@@ -31,9 +31,8 @@ class Drawer:
         return min(abs(y1 - y2), self.size_c - abs(y1 - y2))
 
     def place_sputnkik(self, satelite):
-        if satelite.r < 0 or satelite.r >= self.size_r:
+        if satelite.r == None:
             return None
-        satelite.c %= self.size_c
         self.datafr.ix[satelite.r * self.size_c + satelite.c, 'satelite'] += 1
         for r1 in range(satelite.r - self.radius, satelite.r + self.radius + 1):
             if r1 < 0 or r1 >= self.size_r:
@@ -53,6 +52,7 @@ class Drawer:
             x_column='latitude',
             y_column='longitude',
             color_column='value',
+            text_column='satelite',
             text_color='white')
             .axes.set_xaxis_label('latitude')
             .axes.set_yaxis_label('longitude')
