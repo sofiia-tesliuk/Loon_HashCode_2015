@@ -6,13 +6,13 @@ class MovementGrid:
 
     def _a(self, r, c):
         try:
-            return self.wind[r][c]
+            return self.wind[r][c][0]
         except IndexError:
             pass
 
     def _b(self, r, c):
         try:
-            return self.wind[r][c]
+            return self.wind[r][c][1]
         except IndexError:
             pass
 
