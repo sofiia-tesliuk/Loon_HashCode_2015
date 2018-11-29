@@ -25,15 +25,14 @@ class Satellite:
 
     def next_move(self):
         if self.launched():
-            min = self.possible_distance_to_target(self.altitude)
+            min_d = self.possible_distance_to_target(self.altitude)
             i_min = 0
             if self.altitude > 1:
-                if self.possible_distance_to_target(self.altitude - 1) < min:
-                    min = min
+                if self.possible_distance_to_target(self.altitude - 1) < min_d:
+                    min_d = self.possible_distance_to_target(self.altitude - 1)
                     i_min = -1
             if self.altitude < self.loon.A - 2:
-                if self.possible_distance_to_target(self.altitude + 1) < min:
-                    min = min
+                if self.possible_distance_to_target(self.altitude + 1) < min_d:
                     i_min = 1
 
             self.altitude += i_min
