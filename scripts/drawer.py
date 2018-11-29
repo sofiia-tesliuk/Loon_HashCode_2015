@@ -65,3 +65,4 @@ class Drawer:
         self.datafr = self.dforig.copy()
         for satelite in satelites:
             self.place_sputnkik(satelite)
+        self.draw()
