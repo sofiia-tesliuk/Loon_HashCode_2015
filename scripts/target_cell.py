@@ -7,6 +7,5 @@ class TargetCell:
     def covered(self, satellites):
         for satellite in satellites:
             if satellite.in_simulation():
-                return ((satellite.r  - self.r)**2 +
-                 (min(abs(satellite.c - self.c), self.loon.C - abs(satellite.c - self.c)))**2) <= self.loon.V**2
+                return self.loon.distance(satellite.r, satellite.c, self.r, self.c) <= self.loon.V**2
         return False
