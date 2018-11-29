@@ -51,26 +51,25 @@ class Loon:
 
             for i in range(self.A):
                 wind = [[int(x) for x in y] for y in data[i * self.R: (i + 1)*self.R]]
-                print(wind)
                 self.movement_grids.append(MovementGrid(self, wind))
 
     def distance(self, r, c, u, v):
         return (r  - u)**2 + (min(abs(c - v), self.C - abs(c - v)))**2
 
     def simulation(self):
-        self.drawer.draw()
+        self.drawer.draw(self.score)
         for satellite in self.satellites:
             satellite.launch()
 
         for i in range(self.T):
-            for i in range(self.T):
-                for satellite in self.satellites:
-                    satellite.next_move()
+            for satellite in self.satellites:
+                satellite.next_move()
+                print('\tSatellite {}, alt: {}'.format(i, (lambda x: x.altitude if x.r is not None else None)(satellite)))
 
-                for target_cell in self.target_cells:
-                    self.score += int(target_cell.covered())
-                input("Current step: {}\tScore -> {}".format(i, self.score))
-                self.drawer.redraw(self.satellites)
+            for target_cell in self.target_cells:
+                self.score += int(target_cell.covered())
+            input("Current step: {}\tScore -> {}".format(i, self.score))
+            self.drawer.redraw(self.satellites, self.score)
 
 
 
