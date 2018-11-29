@@ -21,6 +21,7 @@ class Drawer:
         for target in target_cells:
             self.place_target(target)
         self.datafr = self.dforig.copy()
+        self.datasat = self.datafr[(self.datafr['satelite'])]
         for satelite in satelites:
             self.place_sputnkik(satelite)
 
@@ -46,8 +47,14 @@ class Drawer:
 
     def draw(self, score):
         for index, row in self.datafr.iterrows():
-            self.datafr.ix[index, 'value'] = row['target'] + row['covered']*2 + row["satelite"]*2
+            self.datafr.ix[index, 'value'] = row['target'] + row['covered']*2
         (chartify.Chart(blank_labels=True, x_axis_type='categorical', y_axis_type='categorical')
+            .plot.scatter(
+            data_frame=self.datasat,
+            x_column='latitude',
+            y_column='longitude',
+            size_column='satelite',
+            color_column='covered')
             .plot.heatmap(
             data_frame=self.datafr,
             x_column='latitude',
