@@ -39,7 +39,7 @@ class Loon:
             self.start_cell_c = int(data[2][1])
 
             for i in range(self.TCells):
-                self.target_cells.append(TargetCell(self, data[i + 3][0], data[i + 3][1]))
+                self.target_cells.append(TargetCell(self, int(data[i + 3][0]), int(data[i + 3][1])))
 
             for i in range(self.B):
                 try:
@@ -50,7 +50,9 @@ class Loon:
             data = data[self.TCells + 3:]
 
             for i in range(self.A):
-                self.movement_grids.append(MovementGrid(self, data[i * self.R: (i + 1)*self.R]))
+                wind = [[int(x) for x in y] for y in data[i * self.R: (i + 1)*self.R]]
+                print(wind)
+                self.movement_grids.append(MovementGrid(self, wind))
 
     def distance(self, r, c, u, v):
         return (r  - u)**2 + (min(abs(c - v), self.C - abs(c - v)))**2
