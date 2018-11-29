@@ -33,7 +33,7 @@ class Drawer:
     def place_sputnkik(self, satelite):
         if satelite.r < 0 or satelite.r >= self.size_r:
             return None
-        satelite.c %= size.c
+        satelite.c %= self.size.c
         self.datafr.ix[satelite.r * self.size_c + satelite.c, 'satelite'] += 1
         for r1 in range(satelite.r - self.radius, satelite.r + self.radius + 1):
             if r1 < 0 or r1 >= self.size_r:
