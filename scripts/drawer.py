@@ -44,10 +44,7 @@ class Drawer:
                 if (satelite.r - r1)**2 + self.columndist(satelite.c, c1)**2 <= self.radius**2:
                     self.datafr.ix[r1 * self.size_c + c1, 'covered'] = True
 
-    def count_targets(self):
-        return sum(self.datafr['target'] & self.datafr['covered'])
-
-    def draw(self):
+    def draw(self, score):
         for index, row in self.datafr.iterrows():
             self.datafr.ix[index, 'value'] = row['target'] + row['covered']*2 + row["satelite"]*2
         (chartify.Chart(blank_labels=True, x_axis_type='categorical', y_axis_type='categorical')
@@ -60,12 +57,12 @@ class Drawer:
             .axes.set_xaxis_label('latitude')
             .axes.set_yaxis_label('longitude')
             .set_title('Earth')
-            .set_subtitle('Score: ' + str(self.count_targets()))
+            .set_subtitle('Score: ' + str(score))
             .show('html'))
 
-    def redraw(self, satelites):
+    def redraw(self, satelites, score):
         del self.datafr
         self.datafr = self.dforig.copy()
         for satelite in satelites:
             self.place_sputnkik(satelite)
-        self.draw()
+        self.draw(score)
