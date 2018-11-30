@@ -57,20 +57,26 @@ class Loon:
     def distance(self, r, c, u, v):
         return (r  - u)**2 + (min(abs(c - v), self.C - abs(c - v)))**2
 
+    def update_score(self):
+        for target_cell in self.target_cells:
+            self.score += int(target_cell.covered())
+
     def simulation(self):
-        self.drawer.draw(self.score)
         for satellite in self.satellites:
             satellite.launch()
+        self.update_score()
+        self.drawer.draw(self.score)
+        input("Current step: 0\tScore -> {}".format(self.score))
 
         for i in range(self.T):
             for j, satellite in enumerate(self.satellites):
                 satellite.next_move()
                 print('\tSatellite {}, alt: {}'.format(j, (lambda x: x.altitude if x.r is not None else None)(satellite)))
 
-            for target_cell in self.target_cells:
-                self.score += int(target_cell.covered())
-            input("Current step: {}\tScore -> {}".format(i, self.score))
+            self.update_score()
             self.drawer.redraw(self.satellites, self.score)
+            input("\nCurrent step: {}\tScore -> {}".format(i, self.score))
+        print("Final score: {}".format(self.score))
 
 
 

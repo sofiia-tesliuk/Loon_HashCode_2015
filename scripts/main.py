@@ -6,4 +6,4 @@ def main(path):
     ln.simulation()
 
 
-main('../data/example.txt')
+main('../data/example_1.txt')

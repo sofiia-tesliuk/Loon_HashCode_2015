@@ -45,7 +45,7 @@ class Drawer:
 
     def draw(self, score):
         for index, row in self.datafr.iterrows():
-            self.datafr.ix[index, 'value'] = row['target'] + row['covered']*2 + row["satelite"]*2
+            self.datafr.ix[index, 'value'] = row['target'] + row['covered']*2
         (chartify.Chart(blank_labels=True, x_axis_type='categorical', y_axis_type='categorical')
             .plot.heatmap(
             data_frame=self.datafr,

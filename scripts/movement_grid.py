@@ -17,6 +17,11 @@ class MovementGrid:
             pass
 
     def next_position(self, r, c):
-        if 0 <= r + self._a(r, c) <= self.loon.R:
-            return r + self._a(r, c), (c + self._b(r, c)) % self.loon.C
+        if r is None:
+            return None, None
+        try:
+            if 0 <= r + self._a(r, c) <= self.loon.R:
+                return r + self._a(r, c), (c + self._b(r, c)) % self.loon.C
+        except TypeError:
+            pass
         return None, None
