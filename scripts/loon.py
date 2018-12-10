@@ -2,10 +2,12 @@ from scripts.target_cell import TargetCell
 from scripts.movement_grid import MovementGrid
 from scripts.satelite import Satellite
 from scripts.drawer import Drawer
+from tqdm import tqdm
 
 
 class Loon:
-    def __init__(self, data_path):
+    def __init__(self, data_path, visualise):
+        self.visualise = visualise
         self.score = 0
         self.satellites = []
         self.target_cells = []
@@ -20,7 +22,8 @@ class Loon:
         self.start_cell_r = None
         self.start_cell_c = None
         self._parse_data(data_path)
-        self.drawer = Drawer(self.target_cells, self.satellites, self.C, self.R, self.V)
+        if self.visualise:
+            self.drawer = Drawer(self.target_cells, self.satellites, self.C, self.R, self.V)
 
     def _parse_data(self, filename):
         with open(filename, 'r') as file:
@@ -65,18 +68,25 @@ class Loon:
         for satellite in self.satellites:
             satellite.launch()
         self.update_score()
-        self.drawer.draw(self.score)
-        input("Current step: 0\tScore -> {}".format(self.score))
+        if self.visualise:
+            self.drawer.draw(self.score)
+            input("Current step: 0\tScore -> {}".format(self.score))
 
-        for i in range(self.T):
-            for j, satellite in enumerate(self.satellites):
-                satellite.next_move()
-                print('\tSatellite {}, alt: {}'.format(j, (lambda x: x.altitude if x.r is not None else None)(satellite)))
+        with open('../data/output/out.out', 'w') as file:
+            for i in tqdm(range(self.T)):
+                for j, satellite in enumerate(self.satellites):
+                    moved = satellite.next_move()
+                    file.write("{} ".format(moved))
+                    if self.visualise:
+                        print('\tSatellite {}, alt: {}'.format(j, (lambda x: x.altitude if x.r is not None else None)(satellite)))
+                file.write("\n")
 
-            self.update_score()
-            self.drawer.redraw(self.satellites, self.score)
-            input("\nCurrent step: {}\tScore -> {}".format(i, self.score))
-        print("Final score: {}".format(self.score))
+                self.update_score()
+                if self.visualise:
+                    self.drawer.redraw(self.satellites, self.score)
+                    input("\nCurrent step: {}\tScore -> {}".format(i, self.score))
+
+        print("\nFinal score: {}, which corresponds to {} % coverage.".format(self.score, round(self.score/self.T/len(self.target_cells)*100, 2)))
 
 
 
