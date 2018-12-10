@@ -6,6 +6,6 @@ class TargetCell:
 
     def covered(self):
         for satellite in self.loon.satellites:
-            if satellite.in_simulation():
-                return self.loon.distance(satellite.r, satellite.c, self.r, self.c) <= self.loon.V**2
+            if satellite.cover_target_cell(self):
+                return True
         return False
