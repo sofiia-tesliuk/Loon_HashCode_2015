@@ -1,5 +1,8 @@
 import chartify
 from pandas import DataFrame
+from bokeh.io import show
+from bokeh.models import LinearColorMapper, BasicTicker, PrintfTickFormatter, ColorBar
+from bokeh.plotting import figure
 
 
 class Drawer:
@@ -46,6 +49,7 @@ class Drawer:
     def draw(self, score):
         for index, row in self.datafr.iterrows():
             self.datafr.ix[index, 'value'] = row['target'] + row['covered']*2
+            '''
         (chartify.Chart(blank_labels=True, x_axis_type='categorical', y_axis_type='categorical')
             .plot.heatmap(
             data_frame=self.datafr,
@@ -59,6 +63,34 @@ class Drawer:
             .set_title('Earth')
             .set_subtitle('Score: ' + str(score))
             .show('html'))
+            '''
+        colors = ["#75968f", "#a5bab7", "#c9d9d3", "#e2e2e2", "#dfccce", "#ddb7b1", "#cc7878", "#933b41", "#550b1d"]
+        mapper = LinearColorMapper(palette=colors, low=0, high=self.datafr.value.max())
+        TOOLS = "hover,save,pan,box_zoom,reset,wheel_zoom"
+        p = figure(title="Earth",
+                   x_range=list(str(x) for x in set(self.datafr.latitude)),
+                   y_range=list(str(y) for y in set(self.datafr.longitude)),
+                   x_axis_location="above", plot_width=900, plot_height=400,
+                   tools=TOOLS, toolbar_location='below')
+
+        p.axis.axis_line_color = None
+        p.axis.major_tick_line_color = None
+        p.axis.major_label_text_font_size = "5pt"
+        p.axis.major_label_standoff = 0
+        p.xaxis.major_label_orientation = 3.14 / 3
+
+        p.rect(x="latitude", y="longitude", width=1, height=1,
+               source=self.datafr,
+               fill_color={'field': 'value', 'transform': mapper},
+               line_color=None)
+
+        color_bar = ColorBar(color_mapper=mapper, major_label_text_font_size="5pt",
+                             ticker=BasicTicker(desired_num_ticks=len(colors)),
+                             formatter=PrintfTickFormatter(format="%d%%"),
+                             label_standoff=6, border_line_color=None, location=(0, 0))
+        p.add_layout(color_bar, 'right')
+
+        show(p)
 
     def redraw(self, satelites, score):
         del self.datafr
