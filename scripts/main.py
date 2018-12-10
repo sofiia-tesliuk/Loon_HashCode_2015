@@ -2,7 +2,8 @@ from scripts.loon import Loon
 
 
 def main(path):
-    ln = Loon(path, False)
+    to_visualize = True
+    ln = Loon(path, to_visualize)
     ln.simulation()
 
 
