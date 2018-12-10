@@ -1,4 +1,4 @@
-import chartify
+#import chartify
 from pandas import DataFrame
 from bokeh.io import show
 from bokeh.models import LinearColorMapper, BasicTicker, PrintfTickFormatter, ColorBar
