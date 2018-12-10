@@ -16,6 +16,11 @@ class Satellite:
     def in_simulation(self):
         return (self.c is not None) and self.launched()
 
+    def cover_target_cell(self, target_cell):
+        if self.in_simulation():
+            return self.loon.distance(self.r, self.c, target_cell.r, target_cell.c) <= self.loon.V**2
+        return False
+
     def possible_distance_to_target(self, alt):
         possible_move = self.loon.movement_grids[alt - 1].next_position(self.r, self.c)
         if possible_move[0] is not None:
@@ -39,5 +44,6 @@ class Satellite:
             next_move = self.loon.movement_grids[self.altitude - 1].next_position(self.r, self.c)
             self.r = next_move[0]
             self.c = next_move[1]
+            return i_min
 
 
