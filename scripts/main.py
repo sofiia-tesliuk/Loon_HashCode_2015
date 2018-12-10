@@ -6,4 +6,4 @@ def main(path):
     ln.simulation()
 
 
-main('../data/example_1.txt')
+main('../data/loon_r70_c300_a8_radius7_saturation_250.in')
