@@ -70,7 +70,7 @@ class Drawer:
         p = figure(title="Earth",
                    x_range=list(str(x) for x in set(self.datafr.latitude)),
                    y_range=list(str(y) for y in set(self.datafr.longitude)),
-                   x_axis_location="above", plot_width=1200, plot_height=280,
+                   x_axis_location="above", plot_width=500, plot_height=300,
                    tools=TOOLS, toolbar_location='below')
 
         p.axis.axis_line_color = None
