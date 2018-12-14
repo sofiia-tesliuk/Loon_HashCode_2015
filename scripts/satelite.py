@@ -45,5 +45,6 @@ class Satellite:
             self.r = next_move[0]
             self.c = next_move[1]
             return i_min
+        return 0
 
 

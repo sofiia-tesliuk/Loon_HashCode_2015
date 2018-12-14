@@ -1,8 +1,9 @@
 from scripts.target_cell import TargetCell
 from scripts.movement_grid import MovementGrid
 from scripts.satelite import Satellite
-from scripts.drawer import Drawer
+from visualisation.drawer import Drawer
 from tqdm import tqdm
+import random
 
 
 class Loon:
@@ -22,8 +23,7 @@ class Loon:
         self.start_cell_r = None
         self.start_cell_c = None
         self._parse_data(data_path)
-        if self.visualise:
-            self.drawer = Drawer(self.target_cells, self.satellites, self.C, self.R, self.V)
+        self.drawer = Drawer(self.target_cells, self.satellites, self.C, self.R, self.V)
 
     def _parse_data(self, filename):
         with open(filename, 'r') as file:
@@ -43,6 +43,8 @@ class Loon:
 
             for i in range(self.TCells):
                 self.target_cells.append(TargetCell(self, int(data[i + 3][0]), int(data[i + 3][1])))
+
+            random.shuffle(self.target_cells)
 
             for i in range(self.B):
                 try:
@@ -68,8 +70,8 @@ class Loon:
         for satellite in self.satellites:
             satellite.launch()
         self.update_score()
+        self.drawer.draw(self.score)
         if self.visualise:
-            self.drawer.draw(self.score)
             input("Current step: 0\tScore -> {}".format(self.score))
 
         with open('../data/output/out.out', 'w') as file:
@@ -77,16 +79,27 @@ class Loon:
                 for j, satellite in enumerate(self.satellites):
                     moved = satellite.next_move()
                     file.write("{} ".format(moved))
-                    if self.visualise:
-                        print('\tSatellite {}, alt: {}'.format(j, (lambda x: x.altitude if x.r is not None else None)(satellite)))
                 file.write("\n")
 
                 self.update_score()
                 if self.visualise:
                     self.drawer.redraw(self.satellites, self.score)
                     input("\nCurrent step: {}\tScore -> {}".format(i, self.score))
+                try:
+                    if i % 25 == 0:
+                        self.drawer.redraw(self.satellites, self.score)
+                        input("Press E")
+                except ZeroDivisionError:
+                    pass
+            self.drawer.redraw(self.satellites, self.score)
 
-        print("\nFinal score: {}, which corresponds to {} % coverage.".format(self.score, round(self.score/self.T/len(self.target_cells)*100, 2)))
+        satellites_in_simulation = sum([satellite.in_simulation() for satellite in self.satellites])
+        print("\nFinal score: {}, which corresponds to {} % coverage.\n"
+              "Satellites in simulation: {}, from {}, which corespond to {}%."
+              .format(self.score, round(self.score/self.T/len(self.target_cells)*100, 2), satellites_in_simulation,
+                      len(self.satellites), round(satellites_in_simulation/len(self.satellites)*100, 2)))
+        # for satellite in self.satellites:
+        #     print("Satellite:\t\tr: {}\t\tc: {}".format(satellite.r, satellite.c))
 
 
 
