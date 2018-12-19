@@ -22,6 +22,7 @@ class Loon:
         self.B = None
         self.start_cell_r = None
         self.start_cell_c = None
+        print("Parsing data.")
         self._parse_data(data_path)
         self.drawer = Drawer(self.target_cells, self.satellites, self.C, self.R, self.V)
 
@@ -67,11 +68,12 @@ class Loon:
             self.score += int(target_cell.covered())
 
     def simulation(self):
+        print("Simulation.")
         for satellite in self.satellites:
             satellite.launch()
         self.update_score()
-        self.drawer.draw(self.score)
         if self.visualise:
+            self.drawer.draw(self.score)
             input("Current step: 0\tScore -> {}".format(self.score))
 
         with open('../data/output/out.out', 'w') as file:
@@ -83,24 +85,19 @@ class Loon:
 
                 self.update_score()
                 if self.visualise:
-                    self.drawer.redraw(self.satellites, self.score)
                     input("\nCurrent step: {}\tScore -> {}".format(i, self.score))
-                try:
-                    if i % 25 == 0:
-                        self.drawer.redraw(self.satellites, self.score)
-                        input("Press E")
-                except ZeroDivisionError:
-                    pass
-            self.drawer.redraw(self.satellites, self.score)
+                    try:
+                        if i % 25 == 0:
+                            self.drawer.redraw(self.satellites, self.score)
+                            input("Press E")
+                    except ZeroDivisionError:
+                        pass
+
+            if self.visualise:
+                self.drawer.redraw(self.satellites, self.score)
 
         satellites_in_simulation = sum([satellite.in_simulation() for satellite in self.satellites])
         print("\nFinal score: {}, which corresponds to {} % coverage.\n"
-              "Satellites in simulation: {}, from {}, which corespond to {}%."
+              "Satellites in simulation: {}, from {}, which correspond to {}%."
               .format(self.score, round(self.score/self.T/len(self.target_cells)*100, 2), satellites_in_simulation,
                       len(self.satellites), round(satellites_in_simulation/len(self.satellites)*100, 2)))
-        # for satellite in self.satellites:
-        #     print("Satellite:\t\tr: {}\t\tc: {}".format(satellite.r, satellite.c))
-
-
-
-
