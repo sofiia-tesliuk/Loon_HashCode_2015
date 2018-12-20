@@ -1,7 +1,7 @@
 from scripts.target_cell import TargetCell
 from scripts.movement_grid import MovementGrid
 from scripts.satelite import Satellite
-from visualisation.drawer import Drawer
+from scripts.drawer import Drawer
 from tqdm import tqdm
 import random
 
@@ -85,11 +85,10 @@ class Loon:
 
                 self.update_score()
                 if self.visualise:
-                    input("\nCurrent step: {}\tScore -> {}".format(i, self.score))
                     try:
                         if i % 25 == 0:
                             self.drawer.redraw(self.satellites, self.score)
-                            input("Press E")
+                            input("\nCurrent step: {}\tScore -> {}".format(i, self.score))
                     except ZeroDivisionError:
                         pass
 
