@@ -40,4 +40,4 @@ As we can see, greedy algorithms as #1 and #2, can be improved with deeper looki
 ### Project team
 [Sofiia Tesliuk](https://github.com/sofiia-tesliuk)  | [Volodymyr Lavrushko](https://github.com/v-lavrushko)
 ------------- | -------------
-[<img src="https://github.com/sofiia-tesliuk.png?size=30" width="100" height="100">](https://github.com/sofiia-tesliuk) | [<img src="https://github.com/v-lavrushko.png?size=30" width="100" height="100">](https://github.com/v-lavrushko) 
+[<img src="https://github.com/sofiia-tesliuk.png?size=100" width="100" height="100">](https://github.com/sofiia-tesliuk) | [<img src="https://github.com/v-lavrushko.png?size=30" width="100" height="100">](https://github.com/v-lavrushko) 
